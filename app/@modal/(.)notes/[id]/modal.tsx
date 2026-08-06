@@ -1,21 +1,23 @@
-
 import css from "./Modal.module.css";
 import { createPortal } from "react-dom";
 import React, { useEffect} from "react";
-interface NotesModalProps {
-  onClose: () => void;
+import { useRouter } from 'next/navigation';
+interface NotePreviewModalProps {
   children: React.ReactNode
 }
-export default function NotesModal({ onClose, children }: NotesModalProps) {
+export default function NotePreviewModal({ children }: NotePreviewModalProps) {
+    const router = useRouter()
+    const closeModal = () => router.back()
   const handleBackDropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      closeModal();
     }
   };
   useEffect(() => {
+    const closeModal = () => router.back()
     const handleButtonClick = (e: KeyboardEvent) => {
       if (e.code === "Escape") {
-        onClose();
+        closeModal();
       }
     };
     document.addEventListener("keydown", handleButtonClick);
@@ -24,7 +26,7 @@ export default function NotesModal({ onClose, children }: NotesModalProps) {
       document.removeEventListener("keydown", handleButtonClick);
       document.body.style.overflow = "";
     };
-  }, [onClose]);
+  }, [router]);
   return createPortal(
     <div
       className={css.backdrop}

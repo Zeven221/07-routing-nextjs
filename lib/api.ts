@@ -10,15 +10,18 @@ export async function fetchNotes(config: {
   page: number;
   perPage: number;
   search?: string;
+  tag?: string;
 }): Promise<fetchNotesData> {
   const response = await axios.get<fetchNotesData>("/notes", {
     params: {
       page: config.page,
       perPage: config.perPage,
-      ...(config.search !== '' && {search: config.search})
+      ...(config.search !== "" && { search: config.search }),
+      ...(config.tag !== "" && { tag: config.tag }),
     },
     headers: { Authorization: API_KEY },
   });
+  console.log(config.tag)
   return response.data;
 }
 export async function createNote(body: NoteFormValue) {
@@ -29,15 +32,13 @@ export async function createNote(body: NoteFormValue) {
 }
 export async function deleteNote(id: string) {
   const response = await axios.delete<Note>(`/notes/${id}`, {
-
     headers: { Authorization: API_KEY },
   });
   return response.data;
 }
-export async function fetchNoteById(id: string){
-    const response = await axios.get<Note>(`/notes/${id}`, {
-
+export async function fetchNoteById(id: string) {
+  const response = await axios.get<Note>(`/notes/${id}`, {
     headers: { Authorization: API_KEY },
   });
-  return response.data
+  return response.data;
 }

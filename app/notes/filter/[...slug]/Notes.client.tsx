@@ -2,20 +2,23 @@
 import { useState } from "react";
 import { fetchNotes } from "@/lib/api";
 import NoteList from "@/components/NoteList/NoteList";
-import css from "@/app/notes/Notes.module.css";
+import css from "./Notes.module.css";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import NotesModal from "@/components/Modal/Modal";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import NoteForm from "@/components/NoteForm/NoteForm";
 import { useDebouncedCallback } from "use-debounce";
 import Pagination from "@/components/Pagination/Pagination";
-function ClientApp() {
+interface ClientAppProps {
+  tag: string | undefined;
+}
+function ClientApp({ tag }: ClientAppProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const { data, isSuccess } = useQuery({
     queryKey: ["notes", currentPage, search],
-    queryFn: () => fetchNotes({ page: currentPage, perPage: 12, search }),
+    queryFn: () => fetchNotes({ page: currentPage, perPage: 12, search, tag }),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
   });
@@ -46,7 +49,7 @@ function ClientApp() {
       )}
       <header className={css.toolbar}>
         <SearchBox onChangeValue={handleSeach}></SearchBox>
-        {isSuccess && totalPages > 1 &&(
+        {isSuccess && totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}
