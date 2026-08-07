@@ -4,9 +4,14 @@ import { useParams } from "next/navigation";
 import css from "./NotePreview.module.css";
 import { fetchNoteById } from "@/lib/api";
 import NotesModal from "@/components/Modal/Modal";
-import { useRouter } from 'next/compat/router'
+import { useRouter } from 'next/navigation'
 function NotePreviewClient() {
   const router = useRouter()
+  const handleGoBack = () => {
+
+      router.back();
+    }
+  
   const { id } = useParams<{ id: string }>();
   const {
     data: note,
@@ -24,7 +29,7 @@ function NotePreviewClient() {
     return <p>Something went wrong.</p>;
   }
   return (
-    <NotesModal onClose={()=> router?.back()}>
+    <NotesModal onClose={handleGoBack}>
       <div className={css.container}>
         <div className={css.item}>
           <div className={css.header}>
