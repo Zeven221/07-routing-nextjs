@@ -17,7 +17,7 @@ function ClientApp({ tag }: ClientAppProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const { data, isSuccess } = useQuery({
-    queryKey: ["notes", currentPage, search],
+    queryKey: ["notes", currentPage, search, tag],
     queryFn: () => fetchNotes({ page: currentPage, perPage: 12, search, tag }),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
